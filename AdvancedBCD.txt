@@ -1,0 +1,143 @@
+--------------------------------------------------------------------------------
+-- Company: 
+-- Engineer:
+--
+-- Create Date:   02:19:53 01/04/2018
+-- Design Name:   
+-- Module Name:   /home/ise/BCDCounter/BigBCDTest.vhd
+-- Project Name:  BCDCounter
+-- Target Device:  
+-- Tool versions:  
+-- Description:   
+-- 
+-- VHDL Test Bench Created by ISE for module: BCDBitBIG
+-- 
+-- Dependencies:
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+--
+-- Notes: 
+-- This testbench has been automatically generated using types std_logic and
+-- std_logic_vector for the ports of the unit under test.  Xilinx recommends
+-- that these types always be used for the top-level I/O of a design in order
+-- to guarantee that the testbench will bind correctly to the post-implementation 
+-- simulation model.
+--------------------------------------------------------------------------------
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+ 
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--USE ieee.numeric_std.ALL;
+ 
+ENTITY BigBCDTest IS
+END BigBCDTest;
+ 
+ARCHITECTURE behavior OF BigBCDTest IS 
+ 
+    -- Component Declaration for the Unit Under Test (UUT)
+ 
+    COMPONENT BCDBitBIG
+    PORT(
+         pre_set : IN  std_logic;
+         cin : IN  std_logic;
+         clk : IN  std_logic;
+         updown : IN  std_logic;
+         reset : IN  std_logic;
+         P_big : IN  std_logic_vector(7 downto 0);
+         cout : OUT  std_logic;
+         Q_big : INOUT  std_logic_vector(7 downto 0)
+        );
+    END COMPONENT;
+    
+
+   --Inputs
+   signal pre_set : std_logic := '0';
+   signal cin : std_logic := '0';
+   signal clk : std_logic := '0';
+   signal updown : std_logic := '0';
+   signal reset : std_logic := '0';
+   signal P_big : std_logic_vector(7 downto 0) := (others => '0');
+
+ 	--Outputs
+   signal cout : std_logic;
+   signal Q_big : std_logic_vector(7 downto 0);
+
+   -- Clock period definitions
+   constant clk_period : time := 10 ns;
+ 
+BEGIN
+ 
+	-- Instantiate the Unit Under Test (UUT)
+   uut: BCDBitBIG PORT MAP (
+          pre_set => pre_set,
+          cin => cin,
+          clk => clk,
+          updown => updown,
+          reset => reset,
+          P_big => P_big,
+          cout => cout,
+          Q_big => Q_big
+        );
+
+   -- Clock process definitions
+   clk_process :process
+   begin
+		clk <= '0';
+		wait for clk_period/2;
+		clk <= '1';
+		wait for clk_period/2;
+   end process;
+	
+	stim_proc: process
+begin        
+   -- hold reset state for 100 ns.
+    reset<='1','0' after 1ns;
+	 wait for 100ns;
+end process;
+
+	stim_proc2: process
+begin        
+   -- hold reset state for 100 ns.
+     updown<='0','1' after 200ns;
+	  wait for 400ns;
+end process;
+
+	stim_proc3: process
+begin        
+   -- hold reset state for 100 ns.
+     cin<= '0';
+	  wait for 50ns;
+	  cin<='1';
+	  wait for 50ns;
+ end process;
+	stim_proc4: process
+begin        
+   -- hold reset state for 100 ns.
+	pre_set<='0';
+	
+	  wait for 100ns;
+	  P_big<="00001001";
+     pre_set<='1','0' after 10ns;
+	  wait for 100ns;
+	  P_big<="00001011";
+		pre_set<='1','0' after 10ns;
+	  wait for 100ns;
+	  P_big<="00001101";
+     pre_set<='1','0' after 10ns;
+	  wait for 100ns;
+	  P_big<="00001111";
+     pre_set<='1','0' after 10ns;
+	  wait for 100ns;
+	  P_big<="00001111";
+     pre_set<='1','0' after 10ns;
+	  wait for 100ns;
+
+	  
+	  
+	  
+ end process;
+ 
+	END;

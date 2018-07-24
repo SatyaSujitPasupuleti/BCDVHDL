@@ -1,0 +1,104 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    20:09:38 01/03/2018 
+-- Design Name: 
+-- Module Name:    BCDBitSmall - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use ieee.std_logic_unsigned.all;
+
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity BCDBitSmall is
+	port(pre_set,cin,reset,updown,clk: in std_logic;
+		P: in std_logic_vector(3 downto 0);
+			cout: out std_logic;
+			Q: inout std_logic_vector(3 downto 0));
+end BCDBitSmall;
+
+architecture Behavioral of BCDBitSmall is
+
+signal no_count: std_logic;
+
+
+begin
+
+
+
+
+count: process(clk,updown,reset,pre_set,cin)
+
+begin
+	if reset='1' then
+		Q<=x"0";
+	elsif pre_set='1' then
+		Q<=P;
+	else
+		if cin='1' then
+			Q<=Q;
+		else
+			if rising_edge(clk) then
+					if updown='1' then --count up
+						cout<=NOT(Q(0) AND Q(3) AND (NOT cin));
+						
+						if Q="1001" then --9
+							Q<=x"0";
+						elsif Q="1011" then --11
+							Q<="0110";
+						elsif Q="1101" then --13
+							Q<="0100";
+						elsif Q="1111" then --15
+							Q<="0010";
+						else
+							Q<=Q + x"1";
+				
+						
+						end if;
+				elsif updown='0' then
+					cout<=NOT(Q(0) AND Q(1) AND Q(2) AND Q(3) AND cin);
+					if Q="0000" then
+						Q<="1001";
+						
+					else
+						Q<=Q - x"1";
+					end if;
+				end if;
+				
+			end if;
+			
+		
+		end if;
+	end if;
+	
+		
+	end process;
+
+
+  
+
+
+
+end Behavioral;
+
